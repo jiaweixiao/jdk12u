@@ -1814,6 +1814,11 @@ void JavaThread::thread_main_inner() {
 
   DTRACE_THREAD_PROBE(stop, this);
 
+	long majflt, user_time, sys_time;
+	os::current_thread_majflt_and_cputime(&majflt, &user_time, &sys_time);
+	log_info(gc, thread)("Exit JavaThread %s(tid=%d), Majflt=%ld, user=%ldms, sys=%ldms",
+    this->name(), Thread::current()->osthread()->thread_id(),majflt, user_time, sys_time);
+
   this->exit(false);
   this->smr_delete();
 }

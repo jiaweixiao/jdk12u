@@ -31,3 +31,18 @@ GCStats::GCStats() {
                                                   AdaptiveSizePolicyWeight,
                                                   PromotedPadding);
 }
+
+GCMajfltStats::GCMajfltStats() : _stt_majflt(0) {
+}
+
+GCMajfltStats::~GCMajfltStats() {
+}
+
+void GCMajfltStats::start() {
+  _stt_majflt = os::get_accum_majflt();
+}
+
+void GCMajfltStats::end_and_log(const char* cause) {
+  size_t _end_majflt = os::get_accum_majflt();
+  log_info(gc)("Majflt(%s)=%ld (%ld -> %ld)", cause, _end_majflt - _stt_majflt , _stt_majflt, _end_majflt);
+}

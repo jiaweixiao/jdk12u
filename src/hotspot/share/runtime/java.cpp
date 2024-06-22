@@ -448,6 +448,8 @@ void before_exit(JavaThread* thread) {
     }
   }
 
+  os::dump_thread_majflt_and_cputime("");
+
 #if INCLUDE_JVMCI
   // We are not using CATCH here because we want the exit to continue normally.
   Thread* THREAD = thread;
@@ -485,6 +487,8 @@ void before_exit(JavaThread* thread) {
 
   // Stop concurrent GC threads
   Universe::heap()->stop();
+
+  log_info(gc)("Majflt(exit jvm)=%ld", os::get_accum_majflt());
 
   // Print GC/heap related information.
   Log(gc, heap, exit) log;
